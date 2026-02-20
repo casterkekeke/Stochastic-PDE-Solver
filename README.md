@@ -1,1 +1,1 @@
-# MathFinanceFinalProj
+# Math Finance Final Project
