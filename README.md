@@ -48,10 +48,12 @@ This section details the formal transition from the continuous Black-Scholes PDE
 
     We define a uniform spatial grid where the asset price $S$ is discretized into $M$ intervals of size $\Delta S$, such that $S_j = j \Delta S$ for $j \in \{0, 1, \dots, M\}$. 
     To transform the PDE into a system of algebraic equations, we apply second-order central difference approximations to the spatial derivatives at each interior node $j$:
-    #### Delta Approximation ($\frac{\partial V}{\partial S}$):$$\frac{V_{j+1} - V_{j-1}}{2\Delta S}$
-    #### Gamma Approximation ($\frac{\partial^2 V}{\partial S^2}$):$$\frac{V_{j+1} - 2V_j + V_{j-1}}{\Delta S^2}$
+    #### Delta Approximation ($\frac{\partial V}{\partial S}$):
+    $$\frac{V_{j+1} - V_{j-1}}{2\Delta S}$$
+    #### Gamma Approximation ($\frac{\partial^2 V}{\partial S^2}$):
+    $$\frac{V_{j+1} - 2V_j + V_{j-1}}{\Delta S^2}$$
  
-2. ### Derivation of the Spatial Operator $\mathcal{L}V_j$
+3. ### Derivation of the Spatial Operator $\mathcal{L}V_j$
 
     Substituting these finite difference stencils into the Black-Scholes PDE and evaluating at price level $S_j$:
     $$\frac{\partial V}{\partial t} + \underbrace{r(j \Delta S) \left[ \frac{V_{j+1} - V_{j-1}}{2\Delta S} \right] + \frac{1}{2}\sigma^2 (j \Delta S)^2 \left[ \frac{V_{j+1} - 2V_j + V_{j-1}}{\Delta S^2} \right] - rV_j}_{\mathcal{L}V_j} = 0$$
@@ -63,7 +65,7 @@ This section details the formal transition from the continuous Black-Scholes PDE
     >   * **$c_j$ (Upper Diagonal):** $\frac{1}{2}j(\sigma^2 j + r)$
 
 
-3. ### Application to Time-Stepping Schemes
+4. ### Application to Time-Stepping Schemes
     
     The matrix $\mathbf{A}$ is a tridiagonal matrix constructed from the coefficients $(a_j, b_j, c_j)$. 
     The Identity matrix $\mathbf{I}$ represents the current state. 
@@ -77,7 +79,7 @@ This section details the formal transition from the continuous Black-Scholes PDE
     | **Implicit** | $(\mathbf{I} - \Delta t \mathbf{A}) V^n = V^{n+1}$ | Inversion of the spatial system via matrix solve. |
     | **Crank-Nicolson** | $(\mathbf{I} - \frac{\Delta t}{2} \mathbf{A}) V^n = (\mathbf{I} + \frac{\Delta t}{2} \mathbf{A}) V^{n+1}$ | Averaged operator for $O(\Delta t^2)$ accuracy. |
     
-4. ### Variable Definitions
+5. ### Variable Definitions
     | Variable | Description |
     | :--- | :--- |
     | $V_j^n$ | Option value at time step $n$ and price node $j$. |
