@@ -6,7 +6,7 @@ Theoretical Foundation
 
 The Black-Scholes PDE is defined as:
 
-#### $$\frac{\partial V}{\partial t} + rS \frac{\partial V}{\partial S} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} - rV = 0$$
+$$\frac{\partial V}{\partial t} + rS \frac{\partial V}{\partial S} + \frac{1}{2}\sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} - rV = 0$$
 
 To solve this numerically, we discretize the spatial domain $S$ into $M$ steps and the temporal domain $t$ into $N$ steps. 
 We define $V_j^n$ as the option price at time step $n$ and asset price level $j$.#
@@ -18,28 +18,34 @@ We define $V_j^n$ as the option price at time step $n$ and asset price level $j$
     
     The Explicit scheme uses a forward difference in time and central differences in space. 
     It is computationally fast but conditionally stable, requiring the CFL (Courant-Friedrichs-Lewy) condition to be met to prevent numerical explosion.
-    #### Discretization:
-    $$\frac{V_j^{n+1} - V_j^n}{\Delta t} + rS_j \frac{V_{j+1}^{n+1} - V_{j-1}^{n+1}}{2\Delta S} + \frac{1}{2}\sigma^2 S_j^2 \frac{V_{j+1}^{n+1} - 2V_j^{n+1} + V_{j-1}^{n+1}}{\Delta S^2} = rV_j^{n+1}$$
 
-3. ### Implicit Method
+    Discretization:
+
+   $$\frac{V_j^{n+1} - V_j^n}{\Delta t} + rS_j \frac{V_{j+1}^{n+1} - V_{j-1}^{n+1}}{2\Delta S} + \frac{1}{2}\sigma^2 S_j^2 \frac{V_{j+1}^{n+1} - 2V_j^{n+1} + V_{j-1}^{n+1}}{\Delta S^2} = rV_j^{n+1}$$
+
+2. ### Implicit Method
 
     The Implicit scheme uses a backward difference in time. 
     This results in a system of linear equations that must be solved at each time step. 
     Its primary advantage is that it is unconditionally stable, allowing for much larger time steps $\Delta t$ than the explicit method.
-    #### Discretization:
-   $$\frac{V_j^{n+1} - V_j^n}{\Delta t} + rS_j \frac{V_{j+1}^{n} - V_{j-1}^{n}}{2\Delta S} + \frac{1}{2}\sigma^2 S_j^2 \frac{V_{j+1}^{n} - 2V_j^{n} + V_{j-1}^{n}}{\Delta S^2} = rV_j^{n}$$
 
-4. ### Crank-Nicolson Method
+    Discretization:
+
+$$\frac{V_j^{n+1} - V_j^n}{\Delta t} + rS_j \frac{V_{j+1}^{n} - V_{j-1}^{n}}{2\Delta S} + \frac{1}{2}\sigma^2 S_j^2 \frac{V_{j+1}^{n} - 2V_j^{n} + V_{j-1}^{n}}{\Delta S^2} = rV_j^{n}$$
+
+3. ### Crank-Nicolson Method
 
     The Crank-Nicolson scheme is the industry standard for 1D PDEs. 
     It averages the Explicit and Implicit operators, achieving second-order accuracy in time $O(\Delta t^2)$. 
     Like the Implicit method, it is unconditionally stable but requires solving a tridiagonal system at each step.
 
-    #### Discretization:
-    $$\frac{V_j^{n+1} - V_j^n}{\Delta t} + \frac{1}{2} \left( \mathcal{L}V_j^{n+1} + \mathcal{L}V_j^{n} \right) = 0$$
+    Discretization:
 
-    Where $\mathcal{L}$ is the spatial differential operator. In matrix form, this is solved as:
-    #### $$(I - \frac{\Delta t}{2}A)V^n = (I + \frac{\Delta t}{2}A)V^{n+1}$$
+$$\frac{V_j^{n+1} - V_j^n}{\Delta t} + \frac{1}{2} \left( \mathcal{L}V_j^{n+1} + \mathcal{L}V_j^{n} \right) = 0$$
+
+   Where $\mathcal{L}$ is the spatial differential operator. In matrix form, this is solved as:
+   
+   $$(I - \frac{\Delta t}{2}A)V^n = (I + \frac{\Delta t}{2}A)V^{n+1}$$
 
 ## Numerical Discretization and Matrix Derivation
 
@@ -48,22 +54,38 @@ This section details the formal transition from the continuous Black-Scholes PDE
 
     We define a uniform spatial grid where the asset price $S$ is discretized into $M$ intervals of size $\Delta S$, such that $S_j = j \Delta S$ for $j \in \{0, 1, \dots, M\}$. 
     To transform the PDE into a system of algebraic equations, we apply second-order central difference approximations to the spatial derivatives at each interior node $j$:
-    #### Delta Approximation ($\frac{\partial V}{\partial S}$):  $$\frac{V_{j+1} - V_{j-1}}{2\Delta S}$$
-    #### Gamma Approximation ($\frac{\partial^2 V}{\partial S^2}$):  $$\frac{V_{j+1} - 2V_j + V_{j-1}}{\Delta S^2}$$
+
+Delta Approximation ($\frac{\partial V}{\partial S}$):
+
+$$\frac{V_{j+1} - V_{j-1}}{2\Delta S}$$
+    
+Gamma Approximation ($\frac{\partial^2 V}{\partial S^2}$):
+   
+$$\frac{V_{j+1} - 2V_j + V_{j-1}}{\Delta S^2}$$
  
-3. ### Derivation of the Spatial Operator $\mathcal{L}V_j$
+2. ### Derivation of the Spatial Operator $\mathcal{L}V_j$
 
     Substituting these finite difference stencils into the Black-Scholes PDE and evaluating at price level $S_j$:
-    $$\frac{\partial V}{\partial t} + \underbrace{r(j \Delta S) \left[ \frac{V_{j+1} - V_{j-1}}{2\Delta S} \right] + \frac{1}{2}\sigma^2 (j \Delta S)^2 \left[ \frac{V_{j+1} - 2V_j + V_{j-1}}{\Delta S^2} \right] - rV_j}_{\mathcal{L}V_j} = 0$$
-    By canceling the $\Delta S$ terms and grouping the coefficients by their spatial index $j$, we define the operator $\mathcal{L}V_j = a_j V_{j-1} + b_j V_j + c_j V_{j+1}$ with the following system coefficients:
 
-   > **System Coefficients for Matrix A:**
-    >   * **$a_j$ (Lower Diagonal):** $\frac{1}{2}j(\sigma^2 j - r)$
-    >   * **$b_j$ (Main Diagonal):** $-(\sigma^2 j^2 + r)$
-    >   * **$c_j$ (Upper Diagonal):** $\frac{1}{2}j(\sigma^2 j + r)$
+$$\frac{\partial V}{\partial t} + \underbrace{r(j \Delta S) \left[ \frac{V_{j+1} - V_{j-1}}{2\Delta S} \right] + \frac{1}{2}\sigma^2 (j \Delta S)^2 \left[ \frac{V_{j+1} - 2V_j + V_{j-1}}{\Delta S^2} \right] - rV_j}_{\mathcal{L}V_j} = 0$$
+   
+By canceling the $\Delta S$ terms and grouping the coefficients by their spatial index $j$, we define the operator $\mathcal{L}V_j = a_j V_{j-1} + b_j V_j + c_j V_{j+1}$ with the following system coefficients:
+
+   
+  ### Numerical Transition Matrix Coefficients
+
+The spatial operator $\mathcal{L}$ is represented by a tridiagonal matrix $\mathbf{A}$. The non-zero entries for each row $j$, representing the asset price $S_j$, are derived as follows:
+
+| Coefficient | Position | Formula |
+| :--- | :--- | :--- |
+| $\mathbf{a_j}$ | Lower Diagonal | $\displaystyle \frac{1}{2}j(\sigma^2 j - r)$ |
+| $\mathbf{b_j}$ | Main Diagonal | $\displaystyle -(\sigma^2 j^2 + r)$ |
+| $\mathbf{c_j}$ | Upper Diagonal | $\displaystyle \frac{1}{2}j(\sigma^2 j + r)$ |
+
+> **Note:** These coefficients are used to construct the system $(I - \theta \Delta t \mathbf{A})V^n = (I + (1-\theta) \Delta t \mathbf{A})V^{n+1}$, where $\theta$ determines the specific FDM scheme (0 for Explicit, 1 for Implicit, 0.5 for Crank-Nicolson).
 
 
-4. ### Application to Time-Stepping Schemes
+3. ### Application to Time-Stepping Schemes
     
     The matrix $\mathbf{A}$ is a tridiagonal matrix constructed from the coefficients $(a_j, b_j, c_j)$. 
     The Identity matrix $\mathbf{I}$ represents the current state. 
@@ -77,7 +99,7 @@ This section details the formal transition from the continuous Black-Scholes PDE
     | **Implicit** | $(\mathbf{I} - \Delta t \mathbf{A}) V^n = V^{n+1}$ | Inversion of the spatial system via matrix solve. |
     | **Crank-Nicolson** | $(\mathbf{I} - \frac{\Delta t}{2} \mathbf{A}) V^n = (\mathbf{I} + \frac{\Delta t}{2} \mathbf{A}) V^{n+1}$ | Averaged operator for $O(\Delta t^2)$ accuracy. |
     
-5. ### Variable Definitions
+4. ### Variable Definitions
     | Variable | Description |
     | :--- | :--- |
     | $V_j^n$ | Option value at time step $n$ and price node $j$. |
