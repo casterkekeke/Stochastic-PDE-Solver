@@ -76,8 +76,7 @@ This section details the formal transition from the continuous Black-Scholes PDE
     | **Crank-Nicolson** | $(\mathbf{I} - \frac{\Delta t}{2} \mathbf{A}) V^n = (\mathbf{I} + \frac{\Delta t}{2} \mathbf{A}) V^{n+1}$ | Averaged operator for $O(\Delta t^2)$ accuracy. |
     
 4.    ### Variable Definitions
-    
-    | Variable | Description |
+  | Variable | Description |
     | :--- | :--- |
     | $V_j^n$ | Option value at time step $n$ and price node $j$. |
     | $S_j$ | Asset price at node $j$, defined as $j \cdot \Delta S$. |
