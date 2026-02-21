@@ -18,16 +18,18 @@ We define $V_j^n$ as the option price at time step $n$ and asset price level $j$
     
     The Explicit scheme uses a forward difference in time and central differences in space. 
     It is computationally fast but conditionally stable, requiring the CFL (Courant-Friedrichs-Lewy) condition to be met to prevent numerical explosion.
-    #### Discretization:$$\frac{V_j^{n+1} - V_j^n}{\Delta t} + rS_j \frac{V_{j+1}^{n+1} - V_{j-1}^{n+1}}{2\Delta S} + \frac{1}{2}\sigma^2 S_j^2 \frac{V_{j+1}^{n+1} - 2V_j^{n+1} + V_{j-1}^{n+1}}{\Delta S^2} = rV_j^{n+1}$$
+    #### Discretization:
+    $$\frac{V_j^{n+1} - V_j^n}{\Delta t} + rS_j \frac{V_{j+1}^{n+1} - V_{j-1}^{n+1}}{2\Delta S} + \frac{1}{2}\sigma^2 S_j^2 \frac{V_{j+1}^{n+1} - 2V_j^{n+1} + V_{j-1}^{n+1}}{\Delta S^2} = rV_j^{n+1}$$
 
-2. ### Implicit Method
+3. ### Implicit Method
 
     The Implicit scheme uses a backward difference in time. 
     This results in a system of linear equations that must be solved at each time step. 
     Its primary advantage is that it is unconditionally stable, allowing for much larger time steps $\Delta t$ than the explicit method.
-    #### Discretization:$$\frac{V_j^{n+1} - V_j^n}{\Delta t} + rS_j \frac{V_{j+1}^{n} - V_{j-1}^{n}}{2\Delta S} + \frac{1}{2}\sigma^2 S_j^2 \frac{V_{j+1}^{n} - 2V_j^{n} + V_{j-1}^{n}}{\Delta S^2} = rV_j^{n}$$
+    #### Discretization:
+   $$\frac{V_j^{n+1} - V_j^n}{\Delta t} + rS_j \frac{V_{j+1}^{n} - V_{j-1}^{n}}{2\Delta S} + \frac{1}{2}\sigma^2 S_j^2 \frac{V_{j+1}^{n} - 2V_j^{n} + V_{j-1}^{n}}{\Delta S^2} = rV_j^{n}$$
 
-3. ### Crank-Nicolson Method
+4. ### Crank-Nicolson Method
 
     The Crank-Nicolson scheme is the industry standard for 1D PDEs. 
     It averages the Explicit and Implicit operators, achieving second-order accuracy in time $O(\Delta t^2)$. 
@@ -76,7 +78,7 @@ This section details the formal transition from the continuous Black-Scholes PDE
     | **Crank-Nicolson** | $(\mathbf{I} - \frac{\Delta t}{2} \mathbf{A}) V^n = (\mathbf{I} + \frac{\Delta t}{2} \mathbf{A}) V^{n+1}$ | Averaged operator for $O(\Delta t^2)$ accuracy. |
     
 4.    ### Variable Definitions
-  | Variable | Description |
+      | Variable | Description |
     | :--- | :--- |
     | $V_j^n$ | Option value at time step $n$ and price node $j$. |
     | $S_j$ | Asset price at node $j$, defined as $j \cdot \Delta S$. |
