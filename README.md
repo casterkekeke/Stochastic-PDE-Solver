@@ -48,10 +48,8 @@ This section details the formal transition from the continuous Black-Scholes PDE
 
     We define a uniform spatial grid where the asset price $S$ is discretized into $M$ intervals of size $\Delta S$, such that $S_j = j \Delta S$ for $j \in \{0, 1, \dots, M\}$. 
     To transform the PDE into a system of algebraic equations, we apply second-order central difference approximations to the spatial derivatives at each interior node $j$:
-    #### Delta Approximation ($\frac{\partial V}{\partial S}$):
-    $$\frac{V_{j+1} - V_{j-1}}{2\Delta S}$$
-    #### Gamma Approximation ($\frac{\partial^2 V}{\partial S^2}$):
-    $$\frac{V_{j+1} - 2V_j + V_{j-1}}{\Delta S^2}$$
+    #### Delta Approximation ($\frac{\partial V}{\partial S}$):  $$\frac{V_{j+1} - V_{j-1}}{2\Delta S}$$
+    #### Gamma Approximation ($\frac{\partial^2 V}{\partial S^2}$):  $$\frac{V_{j+1} - 2V_j + V_{j-1}}{\Delta S^2}$$
  
 3. ### Derivation of the Spatial Operator $\mathcal{L}V_j$
 
